@@ -1,7 +1,3 @@
-#
-# Github-Actions runner image.
-#
-
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y --no-install-recommends dumb-init jq
@@ -29,10 +25,10 @@ RUN ./bin/installdependencies.sh
 
 RUN mkdir /_work
 
-## RUN chown runner /_work /actions-runner /opt/hostedtoolcache
+RUN chown -R runner /_work /actions-runner
 
-COPY scr/token.sh scr/entrypoint.sh scr/app_token.sh /
-RUN chmod +x /token.sh /entrypoint.sh /app_token.sh
+COPY entry_point.sh /
+RUN chmod +x /entry_point.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["./bin/Runner.Listener", "run", "--startuptype", "service"]
+CMD ["./run.py"]
